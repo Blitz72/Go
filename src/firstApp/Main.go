@@ -5,13 +5,31 @@ import (
 	"strconv"
 )
 
+// globally/package scoped variable, need to use full declaration syntax (no :=)
 var name string = "Davey"
 
+// Animal struct, may be exported
+type Animal struct {
+	Name   string // `required max:"100"`
+	Origin string
+}
+
+// Bird struct with Animal characteristics, may be exported
+type Bird struct {
+	Animal
+	SpeedKPH float32
+	CanFly   bool
+}
+
 func main() {
+	// function/block scoped variables
 	var (
 		msg         string
 		age         int
 		daveySmells bool = true
+		ageString   string
+		piString    string
+		pungency    int
 	)
 
 	const (
@@ -24,13 +42,7 @@ func main() {
 		pi float32 = 3.141592654
 	)
 
-	var (
-		ageString string
-		piString  string
-		pungency  int
-	)
-
-	// fmt.Printf("%v, %T\n", pi, pi)
+	// fmt.Printf("pi: %v, %T\n", pi, pi)
 	msg = fmt.Sprintf("%v smells, I mean, rocks!", name)
 	age = 48
 	pungency = rancid
@@ -46,9 +58,43 @@ func main() {
 		fmt.Println("Pungency level tolerable!")
 	}
 
-	// fmt.Printf("%v\n", fine)
-	// fmt.Printf("%v\n", malodorous)
-	// fmt.Printf("%v\n", acrid)
-	// fmt.Printf("%v\n", putrid)
-	// fmt.Printf("%v\n", rancid)
+	fmt.Printf("fine: %v\n", fine)
+	fmt.Printf("malodorous: %v\n", malodorous)
+	fmt.Printf("acrid: %v\n", acrid)
+	fmt.Printf("putrid: %v\n", putrid)
+	fmt.Printf("rancid: %v\n", rancid)
+
+	statePopulations := make(map[string]int)
+	statePopulations = map[string]int{
+		"California":   39250017,
+		"Texas":        27862596,
+		"Florida":      20612439,
+		"New York":     19745289,
+		"Pennsylvania": 12802503,
+		"Illinois":     12801539,
+		"Ohio":         11614373,
+	}
+
+	fmt.Println(statePopulations)
+	statePopulations["Georgia"] = 10310371
+	fmt.Println(statePopulations)
+	delete(statePopulations, "Georgia")
+
+	if popGA, isGeorgia := statePopulations["Georgia"]; isGeorgia {
+		fmt.Printf("Georgia pop.: %v\n", popGA)
+	}
+	if popOH, isOhio := statePopulations["Ohio"]; isOhio {
+		fmt.Printf("Ohio pop.: %v\n", popOH)
+	}
+
+	emu := Bird{
+		Animal:   Animal{Name: "Emu", Origin: "Australia"},
+		SpeedKPH: 48,
+		CanFly:   false,
+	}
+
+	fmt.Println(emu)
+	// tag := reflect.TypeOf(Animal{})
+	// field, _ := tag.FieldByName("Name")
+	// fmt.Println(field.Tag)
 }
